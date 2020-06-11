@@ -48,7 +48,7 @@ class Scene2 extends Phaser.Scene{
         var countDown = this.time.addEvent({
             delay:1000,
             callback: this.onCount,
-            callbackScore: this,
+            callbackScope: this,
             loop: true
         });
         
