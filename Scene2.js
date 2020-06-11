@@ -85,18 +85,18 @@ class Scene2 extends Phaser.Scene{
             }   
         }
     }
-    
-    onCount(){
-        this.initialTime -=1;
-        this.timeLabel.text = "Time Left: " + this.timeFormat(this.initialTime); //Getting error for this timeFormat not a function.
-        //this.text.setText("Time Left: " + this.timeFormat(this.initialTime));
-    }
     timeFormat(seconds){
         var minutes = Math.floor(seconds/60);
         var partInSeconds = seconds%60;
         partInSeconds = partInSeconds.toString().padStart(2,"0");
         return `${minutes}:${partInSeconds}`;
     }
+    onCount(){
+        this.initialTime -=1;
+        this.timeLabel.text = "Time Left: " + this.timeFormat(this.initialTime); //Getting error for this timeFormat not a function.
+        //this.text.setText("Time Left: " + this.timeFormat(this.initialTime));
+    }
+    
     update(){
         
         if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
