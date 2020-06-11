@@ -18,8 +18,8 @@ class Scene2 extends Phaser.Scene{
         
         this.monkey = this.add.sprite(200, 150, "monkey"); 
         this.monkey.play("monkey_anim");
-        this.monkey.setScale(.4);
-       
+        this.monkey.setScale(.4); 
+    
         this.duck =this.physics.add.sprite(200,300, "duck");
         var follower = this.duck.setDepth(100);
         follower.play("duck_anim");
@@ -35,12 +35,23 @@ class Scene2 extends Phaser.Scene{
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         
        
-        var timedEvent = this.time.addEvent({ 
-            delay: 2000, 
+        var timedEvent = this.time.addEvent({ //destroys trees 
+            delay: 1000, 
             callback: this.onEvent, 
             callbackScope: this, 
             loop: true 
         });
+        
+        this.initialTime = 100; //2 minutes in seconds?
+        //var text = this.add.text(32,32, "Time Left: " + this.timeFormat(this.initialTime));
+        this.timeLabel = this.add.bitmapText(300,15, "pixelFont", "Time Left: ",25).setDepth(200);
+        var countDown = this.time.addEvent({
+            delay:1000,
+            callback: this.onCount,
+            callbackScore: this,
+            loop: true
+        });
+        
         
         var graphics = this.add.graphics();
         graphics.fillStyle("Black");
@@ -74,6 +85,18 @@ class Scene2 extends Phaser.Scene{
             }   
         }
     }
+    
+    onCount(){
+        this.initialTime -=1;
+        this.timeLabel.text = "Time Left: " + this.timeFormat(this.initialTime); //Getting error for this timeFormat not a function.
+        //this.text.setText("Time Left: " + this.timeFormat(this.initialTime));
+    }
+    timeFormat(seconds){
+        var minutes = Math.floor(seconds/60);
+        var partInSeconds = seconds%60;
+        partInSeconds = partInSeconds.toString().padStart(2,"0");
+        return `${minutes}:${partInSeconds}`;
+    }
     update(){
         
         if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
@@ -98,6 +121,7 @@ class Scene2 extends Phaser.Scene{
     endGame(){
         this.scene.start("endGame");
     }
+    
   
     
 }

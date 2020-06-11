@@ -3,7 +3,11 @@ class Scene3 extends Phaser.Scene{
         super("endGame");
     }
     create(){
-        this.add.text(20,20, "Game Over" , {font: "25px Arial", fill: "yellow"});
+
+        this.add.bitmapText(20,15, "pixelFont", "Game over ",25);
+        
     }
-    
+    restartGame(){
+        this.scene.start("bootGame");
+    }
 }

@@ -5,6 +5,11 @@ class Scene1 extends Phaser.Scene{
     preload(){
         this.load.image("tree", "assets/images/tree.png");
         this.load.image("grass", "assets/images/grass.png");
+        
+        this.load.spritesheet("title" , "assets/sprites/title.png", {
+                frameWidth: 576,
+                frameHeight: 576
+            });
         this.load.spritesheet("duck" , "assets/sprites/duck.png", {
                 frameWidth: 250,
                 frameHeight: 320
@@ -25,8 +30,15 @@ class Scene1 extends Phaser.Scene{
         this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
     }
     create(){
-        this.scene.start("playGame");
+        this.background=this.add.tileSprite(0,0,config.width, config.height, "grass"); //TileSprite is different from images!
+        this.background.setOrigin(0,0);
         
+        this.anims.create({
+            key: "title_anim", //id for animation
+            frames: this.anims.generateFrameNumbers("title"), //array of frames
+            frameRate: 5, //speed of animation
+            repeat: -1 //will it loop? -1 means infinite
+        });
         this.anims.create({
             key: "duck_anim", //id for animation
             frames: this.anims.generateFrameNumbers("duck"), //array of frames
@@ -51,5 +63,26 @@ class Scene1 extends Phaser.Scene{
             frameRate: 8, //speed of animation
             repeat: -1 //will it loop? -1 means infinite
         });
+        
+        this.title = this.add.sprite(300, 300, "title"); 
+        this.title.play("title_anim");
+        this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.add.bitmapText(150,400, "pixelFont", "Press SPACE to start",40);
     }
+    
+    update(){
+        
+        this.background.tilePositionY-= 0.5;
+        this.background.tilePositionX-= 0.5;
+        if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
+            this.startGame();
+        }
+    }
+ 
+    startGame()
+    {
+        this.scene.start("playGame");
+    }
+    
+    
 }
