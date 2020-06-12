@@ -74,7 +74,7 @@ class Scene1 extends Phaser.Scene{
         this.add.bitmapText(150,400, "pixelFont", "Press SPACE to start",40);
     
     
-         this.spiny = this.add.image(450, 200, "tree").setScale(.5);
+         this.spiny = this.add.image(550, 200, "tree").setScale(.5);
          this.spiny2 = this.add.image(100, 100, "tree").setScale(.5);
          this.spiny3 = this.add.image(200, 500, "tree").setScale(.5);
         
