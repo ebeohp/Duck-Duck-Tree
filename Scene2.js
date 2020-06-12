@@ -42,9 +42,10 @@ class Scene2 extends Phaser.Scene{
             loop: true 
         });
         
-        this.initialTime = 100; //2 minutes in seconds?
+        this.initialTime = 60; //2 minutes in seconds?
         //var text = this.add.text(32,32, "Time Left: " + this.timeFormat(this.initialTime));
         this.timeLabel = this.add.bitmapText(300,15, "pixelFont", "Time Left: ",25).setDepth(200);
+        this.timeLabel.text = "Time Left: " + this.timeFormat(this.initialTime);
         var countDown = this.time.addEvent({
             delay:1000,
             callback: this.onCount,
@@ -53,21 +54,32 @@ class Scene2 extends Phaser.Scene{
         });
         
         
-        var graphics = this.add.graphics();
+        /*var graphics = this.add.graphics();
         graphics.fillStyle("Black");
         graphics.fillRect(0,0,config.width,40).setDepth(150);
-        
+        */
         this.planted = 0; //number of trees planted
         this.score = 0; //number of trees on screen
         this.scoreLabel = this.add.bitmapText(20,15, "pixelFont", "TREES ",25).setDepth(200);
         
         this.projectiles = this.add.group(); //holds all the trees
-        for(var i = 0; i <10; i++){
+        for(var i = 0; i <50; i++){
             this.plantTree(true);
             this.score += 1;
             this.scoreLabel.text = "TREES " + this.score;
         }
+        this.music = this.sound.add("music");
         
+        var musicConfig = { //optional
+            mute: false,
+            volume: 1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: false,
+            delay: 1
+        }
+        this.music.play(musicConfig);
         
     }
     
@@ -102,7 +114,30 @@ class Scene2 extends Phaser.Scene{
         if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
             this.plantTree();
         }
-        
+        if(this.score<5){
+            var graphics = this.add.graphics();
+            graphics.fillStyle(0xff0000, 1).setDepth(151);
+            graphics.beginPath();
+            graphics.moveTo(0,0);
+            graphics.lineTo(config.width, 0);
+            graphics.lineTo(config.width, 40);
+            graphics.lineTo(0,40);
+            graphics.lineTo(0,0);
+            graphics.closePath();
+            graphics.fillPath();
+            
+        }else{
+            var graphics = this.add.graphics();
+            graphics.fillStyle(0x000000, 1).setDepth(151);
+            graphics.beginPath();
+            graphics.moveTo(0,0);
+            graphics.lineTo(config.width, 0);
+            graphics.lineTo(config.width, 40);
+            graphics.lineTo(0,40);
+            graphics.lineTo(0,0);
+            graphics.closePath();
+            graphics.fillPath();
+        }
     }
     
     plantTree(rand){ //can plant trees on where the duck is or at a random location.
@@ -119,9 +154,12 @@ class Scene2 extends Phaser.Scene{
         this.projectiles.add(tree);
     }
     endGame(){
+        this.music.stop();
         this.scene.start("endGame");
     }
-    
+    /*winner(){
+        this.scene.start("winGame");
+    }*/
   
     
 }
