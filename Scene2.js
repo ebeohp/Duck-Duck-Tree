@@ -3,9 +3,6 @@ class Scene2 extends Phaser.Scene{
         super("playGame");
     }
     create(){
-        //this.add.text(20,20, "Playing" , {font: "25px Arial", fill: "yellow"});
-        
-        
         this.grass = this.add.tileSprite(0,0,config.width,config.height,'grass').setOrigin(0,0);
    
         this.ella = this.add.sprite(250, 400, "ella"); 
@@ -31,10 +28,8 @@ class Scene2 extends Phaser.Scene{
         },this);
         follower.setCollideWorldBounds(true);
         
-        
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        
-       
+
         var timedEvent = this.time.addEvent({ //destroys trees 
             delay: 1000, 
             callback: this.onEvent, 
@@ -42,8 +37,7 @@ class Scene2 extends Phaser.Scene{
             loop: true 
         });
         
-        this.initialTime = 60; //2 minutes in seconds?
-        //var text = this.add.text(32,32, "Time Left: " + this.timeFormat(this.initialTime));
+        this.initialTime = 60; //60secs
         this.timeLabel = this.add.bitmapText(300,15, "pixelFont", "Time Left: ",25).setDepth(200);
         this.timeLabel.text = "Time Left: " + this.timeFormat(this.initialTime);
         var countDown = this.time.addEvent({
@@ -53,11 +47,6 @@ class Scene2 extends Phaser.Scene{
             loop: true
         });
         
-        
-        /*var graphics = this.add.graphics();
-        graphics.fillStyle("Black");
-        graphics.fillRect(0,0,config.width,40).setDepth(150);
-        */
         this.planted = 0; //number of trees planted
         this.score = 0; //number of trees on screen
         this.scoreLabel = this.add.bitmapText(20,15, "pixelFont", "TREES ",25).setDepth(200);
@@ -87,13 +76,13 @@ class Scene2 extends Phaser.Scene{
         var ranNum = Math.random()*15;
         for(var i = 0; i<ranNum; i++){ 
             var tree = this.projectiles.getChildren()[i];
-            if(tree){
+            if(tree && this.initialTime!=0){
                 tree.destroy();
                 this.score-= 1;
                 this.scoreLabel.text = "TREES " + this.score;
             }
-            if(this.score == 0){
-            this.endGame();
+            if(this.score == 0 && this.initialTime!=0){
+                this.endGame();
             }   
         }
     }
@@ -104,13 +93,16 @@ class Scene2 extends Phaser.Scene{
         return `${minutes}:${partInSeconds}`;
     }
     onCount(){
-        this.initialTime -=1;
-        this.timeLabel.text = "Time Left: " + this.timeFormat(this.initialTime); //Getting error for this timeFormat not a function.
-        //this.text.setText("Time Left: " + this.timeFormat(this.initialTime));
+        if(this.initialTime!=0)
+        {
+            this.initialTime -=1;
+        }else{
+            this.winner();
+        }
+        this.timeLabel.text = "Time Left: " + this.timeFormat(this.initialTime);
     }
     
     update(){
-        
         if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
             this.plantTree();
         }
@@ -124,8 +116,7 @@ class Scene2 extends Phaser.Scene{
             graphics.lineTo(0,40);
             graphics.lineTo(0,0);
             graphics.closePath();
-            graphics.fillPath();
-            
+            graphics.fillPath();   
         }else{
             var graphics = this.add.graphics();
             graphics.fillStyle(0x000000, 1).setDepth(151);
@@ -157,9 +148,10 @@ class Scene2 extends Phaser.Scene{
         this.music.stop();
         this.scene.start("endGame");
     }
-    /*winner(){
-        this.scene.start("winGame");
-    }*/
+    winner(){
+        this.music.stop();
+        this.scene.start("winGame", {Trees: this.score, Total: this.planted});
+    }
   
     
 }

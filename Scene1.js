@@ -95,10 +95,7 @@ class Scene1 extends Phaser.Scene{
  
     startGame()
     {   
-        
-        
         this.scene.start("playGame");
-        
     }
     
     
