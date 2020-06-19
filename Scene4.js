@@ -26,9 +26,7 @@ class Scene4 extends Phaser.Scene{
         this.add.bitmapText(200,100, "pixelFont", "You won! ",50);
         this.add.bitmapText(205,360, "pixelFont", "Trees: " + this.trees,50);
         this.add.bitmapText(140,400, "pixelFont", "Total Planted: " + this.planted,50);
-        this.add.bitmapText(170,480, "pixelFont", "[Press SPACE to play again] ",25);
-        
-
+        this.add.bitmapText(160,480, "pixelFont", "[Click the ELEPHANT to play again] ",25);
 
         this.anims.create({
             key: "ellawin_anim", //id for animation
@@ -65,15 +63,19 @@ class Scene4 extends Phaser.Scene{
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.win = this.sound.add("win");
         this.win.play();
+
+
+        this.ellawin.setInteractive();
+        this.input.on('gameobjectdown', this.restartGame, this);
     }
     update()
     {
-         if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
+         /*if(Phaser.Input.Keyboard.JustDown(this.spacebar)){
             this.restartGame();
             //this.start.play();
-        }
+        }*/
     }
-    restartGame(){
+    restartGame(pointer, gameObject){
         this.scene.start("bootGame");
     }
 }

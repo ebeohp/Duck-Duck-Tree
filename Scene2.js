@@ -31,13 +31,13 @@ class Scene2 extends Phaser.Scene{
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         var timedEvent = this.time.addEvent({ //destroys trees 
-            delay: 1000, 
+            delay: 1500, 
             callback: this.onEvent, 
             callbackScope: this, 
             loop: true 
         });
         
-        this.initialTime = 60; //60secs
+        this.initialTime = 60; //should be 60secs
         this.timeLabel = this.add.bitmapText(300,15, "pixelFont", "Time Left: ",25).setDepth(200);
         this.timeLabel.text = "Time Left: " + this.timeFormat(this.initialTime);
         var countDown = this.time.addEvent({
